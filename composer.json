@@ -1,31 +1,33 @@
 {
     "name": "laravel/laravel",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "NicoBusiness",
     "keywords": [
-        "framework",
-        "laravel"
+        "Nico",
+        "SMS"
     ],
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
-        "fideloper/proxy": "^4.4",
+        "czim/laravel-service": "^2.0",
+        "econea/nusoap": "^0.9.12",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "jeroennoten/laravel-adminlte": "^3.5",
-        "laravel/framework": "^8.12",
+        "laravel/framework": "^9.0",
         "laravel/jetstream": "^1.6",
         "laravel/sanctum": "^2.6",
         "laravel/tinker": "^2.5",
         "livewire/livewire": "^2.0",
-        "twilio/sdk": "^5.0"
+        "twilio/sdk": "^6.37"
     },
     "require-dev": {
-        "facade/ignition": "^2.5",
+        "spatie/laravel-ignition": "^1.0",
         "fakerphp/faker": "^1.9.1",
         "mockery/mockery": "^1.4.2",
-        "nunomaduro/collision": "^5.0",
-        "phpunit/phpunit": "^9.3.3"
+        "phpunit/phpunit": "^9.3.3",
+        "nunomaduro/collision": "^6.1"
+
     },
     "config": {
         "optimize-autoloader": true,

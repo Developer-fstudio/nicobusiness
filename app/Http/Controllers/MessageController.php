@@ -7,6 +7,18 @@ use App\Models\Message;
 use App\Models\Client;
 use App\Models\MessagesClient;
 use Twilio\Rest\Client as Twilio;
+use App\Models\Empresa;
+use SoapClient;
+ use SoapHeader;
+
+
+
+function console_log( $data ){
+    echo '<script>';
+    echo 'console.log('. json_encode( $data ) .')';
+    echo '</script>';
+  }
+
 
 class MessageController extends Controller
 {
@@ -27,13 +39,15 @@ class MessageController extends Controller
     public function SendMessage($id)
     {
         $message = Message::find($id);
+        $empresa = Empresa::find(1);
+
         $messagesClients = MessagesClient::where('message_id',$message->id)->get();
         // CADA EMPRESA (USER) VAI TER AS SUAS CREDENCIAS DO TWILIO
         // var_dump(env('APP_ENV'));
-        //     $twilio_account = $_ENV['TWILIO.ACCOUNT.ID'];
-        //     $twilio_auth = env('TWILIO_AUTH_TOKEN');
+             $twilio_account = $empresa->TwilioAccountID;
+             $twilio_auth = $empresa->TwilioAccountSecret;
         // var_dump($twilio_account,$twilio_auth);
-        // $twilio = new Twilio($twilio_account, $twilio_auth);
+         $twilio = new Twilio($twilio_account, $twilio_auth);
         // var_dump($twilio);
          foreach($messagesClients as $msg){
 
@@ -41,7 +55,76 @@ class MessageController extends Controller
             $twilio->messages->create(
                 $client->phone,
                 array(
-                    'from' => env('TWILIO_NUMBER'),
+                    'from' => $empresa->TwilioAccountPhone,
+                    'body' => $message->message
+                )
+                );
+            }
+            return redirect('/messages');
+
+    }
+    public function SendMessageExpress($id){
+        $message = Message::find($id);
+        $empresa = Empresa::find(1);
+
+
+        $messagesClients = MessagesClient::where('message_id',$message->id)->get();
+
+        $expressApiUrl = env('APP_URL') . '/docs/SubmissionManager2.wsdl';
+        $expressClient = $empresa->AlticeAccountID;
+        $expressPassword = $empresa->AlticeAccountSecret;
+        $options = array(
+            'application' => 'NicoBusiness',
+            'username' => $expressClient,
+            'password' => $expressPassword,
+       );
+            try {
+            $soap = new SoapClient('https://smsexpress.cloud.altice-empresas.pt/smsexpress-wsdl/SubmissionManager2.wsdl');
+            $header = new SoapHeader('https://smsexpress.cloud.altice-empresas.pt/webservices-smsexpress/SubmissionManager2', 'AuthHeader', $options);
+            $soap->__setSoapHeaders($header);
+            $RESULT = $soap->__getFunctions();
+            console_log($RESULT);
+            $recipients = array('913502523');
+            $my_method_parameter = array(
+                'message' => 'NicoBusiness',
+                'link' => 'www.google.com',
+                'recipients' => $recipients,
+                'sender' => 'Niko',
+                'notification' => 'false',
+                'validity' => 1
+
+           );
+            $soapResponse = $soap->sendWapPushSubmission($options,$my_method_parameter);
+        }catch (\Exception $e){
+            console_log($e);
+        }
+
+            print_r($soapResponse);
+
+    }
+
+
+    public function SendMessageTwilio($id)
+    {
+        $message = Message::find($id);
+        $empresa = Empresa::find(1);
+
+
+        $messagesClients = MessagesClient::where('message_id',$message->id)->get();
+        // CADA EMPRESA (USER) VAI TER AS SUAS CREDENCIAS DO TWILIO
+        // var_dump(env('APP_ENV'));
+        $twilio_account = $empresa->TwilioAccountID;
+        $twilio_auth = $empresa->TwilioAccountSecret;
+         //var_dump($twilio_account,$twilio_auth);
+         $twilio = new Twilio($twilio_account, $twilio_auth);
+        // var_dump($twilio);
+         foreach($messagesClients as $msg){
+
+        $client = Client::find($msg->client_id);
+            $twilio->messages->create(
+                $client->phone,
+                array(
+                    'from' => $empresa->TwilioAccountPhone,
                     'body' => $message->message
                 )
                 );

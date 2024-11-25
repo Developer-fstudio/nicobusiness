@@ -11,12 +11,12 @@
 <form action="/messages" method="POST">
   @csrf
   <div class="mb-6">
-    <label for="" class="form-label">Assunto</label>
-    <input id="subject" name="subject" type="text" class="form-control" tabindex="1">
+    <label for="subject" class="form-label">Assunto</label>
+    <input id="subject" name="subject" type="text" class="form-control" tabindex="1" required>
   </div>
   <div class="mb-6" style="margin-bottom: 50px">
-    <label for="" class="form-label">Mensagem</label>
-    <input id="message" name="message" type="text" class="form-control" tabindex="2">
+    <label for="message" class="form-label">Mensagem</label>
+    <input id="message" name="message" type="text" class="form-control" tabindex="2" required>
   </div>
   <a href="/messages" class="btn btn-secondary" tabindex="5">Cancelar</a>
   <button type="submit" class="btn btn-primary" tabindex="4">Guardar</button>

@@ -17,6 +17,11 @@ class CreateMessagesTable extends Migration
             $table->increments('id');
             $table->string('subject');
             $table->string('message',1000);
+            $table->unsignedBigInteger('user_id')->unsigned()->nullable();
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

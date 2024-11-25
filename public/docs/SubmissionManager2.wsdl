@@ -1,0 +1,426 @@
+<?xml version="1.0"?>
+<wsdl2:description xmlns:wsdl2="http://www.w3.org/ns/wsdl"
+	xmlns:wsoap="http://www.w3.org/ns/wsdl/soap" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" 
+	xmlns:wrpc="http://www.w3.org/ns/wsdl/rpc"
+	xmlns:ns1="http://data.common.smsexpress.ws.madserv.ptinovacao.pt"
+	xmlns:ns2="http://data.submissionmanager.smsexpress.ws.madserv.ptinovacao.pt"
+	xmlns:tns="http://ptinovacao.pt/madserv/ws/smsexpress/submissionmanager"
+	targetNamespace="http://ptinovacao.pt/madserv/ws/smsexpress/submissionmanager">
+
+	<wsdl2:documentation>
+		SMS Submission management
+	</wsdl2:documentation>
+
+	<wsdl2:types>
+
+		<xsd:schema attributeFormDefault="qualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://data.common.smsexpress.ws.madserv.ptinovacao.pt">
+			<xsd:complexType name="AuthenticationInfo">
+				<xsd:sequence>
+					<xsd:element name="application" nillable="true" type="xsd:string" />
+					<xsd:element name="password" nillable="true" type="xsd:string" />
+					<xsd:element name="username" nillable="true" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+
+		<xsd:schema attributeFormDefault="qualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://data.submissionmanager.smsexpress.ws.madserv.ptinovacao.pt">
+
+			<xsd:complexType name="SmsSubmission">
+				<xsd:complexContent>
+					<xsd:extension base="ns2:Submission">
+						<xsd:sequence>
+							<xsd:element name="alphabet" nillable="true" type="xsd:string" />
+							<xsd:element name="message" nillable="true" type="xsd:string" />
+							<xsd:element name="substitutions" nillable="true" type="ns2:ArrayOfArrayOfXsdSubstitutions" />
+							<xsd:element name="useSubstitutions" type="xsd:boolean" />
+							<xsd:element name="smsClass" type="xsd:int" maxOccurs="1"	minOccurs="0" default="-2147483648" />
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+			<xsd:complexType abstract="true" name="Submission">
+				<xsd:sequence>
+					<xsd:element name="contactLists" nillable="true"	type="ns2:ArrayOfXsdContactLists" />
+					<xsd:element name="deliveryDate" nillable="true" type="xsd:dateTime" />
+					<xsd:element name="notification" type="xsd:boolean" />
+					<xsd:element name="notificationRecipient" nillable="true" type="xsd:string" />
+					<xsd:element name="notificationType" nillable="true" type="xsd:string" />
+					<xsd:element name="recipients" nillable="true" type="ns2:ArrayOfXsdRecipients" />
+					<xsd:element name="sender" nillable="true" type="xsd:string" />
+					<xsd:element name="validity" type="xsd:int" />
+					<xsd:element name="userDataHeader" type="xsd:string" maxOccurs="1" minOccurs="0" default=""/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ArrayOfArrayOfXsdSubstitutions">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0"	name="substitutions" nillable="true" type="ns2:ArrayOfXsdSubstitution" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ArrayOfXsdSubstitution">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0"	name="substitution" nillable="true" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ArrayOfXsdContactLists">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="contactlists" nillable="true" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ArrayOfXsdRecipients">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="item" nillable="true" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="SubmissionStatus">
+				<xsd:sequence>
+					<xsd:element name="id" nillable="true" type="xsd:string" />
+					<xsd:element name="message" nillable="true" type="xsd:string" />
+					<xsd:element name="status" type="xsd:int" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="MmsSubmission">
+				<xsd:complexContent>
+					<xsd:extension base="ns2:Submission">
+						<xsd:sequence>
+							<xsd:element name="contentItems" nillable="true" type="ns2:ArrayOfContentItem" />
+							<xsd:element name="messageClass" nillable="true" type="xsd:string" />
+							<xsd:element name="smil" nillable="true" type="xsd:string" />
+							<xsd:element name="subject" nillable="true" type="xsd:string" />
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+			<xsd:complexType name="ArrayOfContentItem">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="item" nillable="true" type="ns2:ContentItem" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ContentItem">
+				<xsd:complexContent>
+					<xsd:extension base="ns2:Submission">
+						<xsd:sequence>
+							<xsd:element name="data" nillable="true" type="xsd:base64Binary" />
+							<xsd:element name="name" nillable="true" type="xsd:string" />
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+			<xsd:complexType name="WapPushSubmission">
+				<xsd:complexContent>
+					<xsd:extension base="ns2:Submission">
+						<xsd:sequence>
+							<xsd:element name="link" nillable="true" type="xsd:string" />
+							<xsd:element name="message" nillable="true" type="xsd:string" />
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+			<xsd:complexType name="SmsPullSubmission">
+				<xsd:complexContent>
+					<xsd:extension base="ns2:SmsSubmission">
+						<xsd:sequence>
+							<xsd:element name="acceptNonAddresseesResponses" type="xsd:boolean" />
+							<xsd:element name="billingId" nillable="true" type="xsd:string" />
+							<xsd:element name="responseAcceptedMessage" nillable="true" type="xsd:string" />
+							<xsd:element name="submissionCode" nillable="true" type="xsd:string" />
+							<xsd:element name="validUntil" nillable="true" type="xsd:dateTime" />
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+			<xsd:complexType name="ArrayOfSmsPullSubmissionResponse">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="xsps" nillable="true" type="ns2:SmsPullSubmissionResponse" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="SmsPullSubmissionResponse">
+				<xsd:sequence>
+					<xsd:element name="date" nillable="true" type="xsd:dateTime" />
+					<xsd:element name="message" nillable="true" type="xsd:string" />
+					<xsd:element name="nonAddressee" type="xsd:boolean" />
+					<xsd:element name="originator" nillable="true" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="SubmissionStatus2">
+				<xsd:sequence>
+					<xsd:element name="canceledMessages" type="xsd:int" />
+					<xsd:element name="endDate" nillable="true" type="xsd:dateTime" />
+					<xsd:element name="failedMessages" type="xsd:int" />
+					<xsd:element name="messageType" type="xsd:int" />
+					<xsd:element name="notifWaitMessages" type="xsd:int" />
+					<xsd:element name="processStatus" type="xsd:int" />
+					<xsd:element name="sentMessages" type="xsd:int" />
+					<xsd:element name="startDate" nillable="true" type="xsd:dateTime" />
+					<xsd:element name="status" type="xsd:int" />
+					<xsd:element name="submissionId" nillable="true" type="xsd:string" />
+					<xsd:element name="totalMessages" type="xsd:int" />
+					<xsd:element name="waitMessages" type="xsd:int" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="SubmissionDetails">
+				<xsd:sequence>
+					<xsd:element name="canceledMessages" type="xsd:int" />
+					<xsd:element name="creationDate" nillable="true" type="xsd:dateTime" />
+					<xsd:element name="endDate" nillable="true" type="xsd:dateTime" />
+					<xsd:element name="failedMessages" type="xsd:int" />
+					<xsd:element name="link" nillable="true" type="xsd:string" />
+					<xsd:element name="message" nillable="true" type="xsd:string" />
+					<xsd:element name="messageType" type="xsd:int" />
+					<xsd:element name="notifWaitMessages" type="xsd:int" />
+					<xsd:element name="notificationRequested" type="xsd:boolean" />
+					<xsd:element name="originator" nillable="true" type="xsd:string" />
+					<xsd:element name="processStatus" type="xsd:int" />
+					<xsd:element name="recipientsStatus" nillable="true" type="ns2:RecipientsStatus" />
+					<xsd:element name="sender" nillable="true" type="xsd:string" />
+					<xsd:element name="sentMessages" type="xsd:int" />
+					<xsd:element name="startDate" nillable="true" type="xsd:dateTime" />
+					<xsd:element name="status" type="xsd:int" />
+					<xsd:element name="submissionId" nillable="true" type="xsd:string" />
+					<xsd:element name="totalMessages" type="xsd:int" />
+					<xsd:element name="waitMessages" type="xsd:int" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="RecipientsStatus">
+				<xsd:sequence>
+					<xsd:element name="canceled" nillable="true" type="ns2:ArrayOfXsdCanceled" />
+					<xsd:element name="delivered" nillable="true" type="ns2:ArrayOfXsdDelivered" />
+					<xsd:element name="failed" nillable="true" type="ns2:ArrayOfXsdFailed" />
+					<xsd:element name="sent" nillable="true" type="ns2:ArrayOfXsdSent" />
+					<xsd:element name="waiting" nillable="true" type="ns2:ArrayOfXsdWaiting" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ArrayOfXsdCanceled">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="canceled" nillable="true" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ArrayOfXsdDelivered">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="delivered" nillable="true" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ArrayOfXsdFailed">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="failed" nillable="true" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ArrayOfXsdSent">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="sent" nillable="true" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ArrayOfXsdWaiting">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="waiting" nillable="true" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+		</xsd:schema>
+
+		<xsd:schema xmlns:ns2="http://data.submissionmanager.smsexpress.ws.madserv.ptinovacao.pt"
+			xmlns:ns1="http://data.common.smsexpress.ws.madserv.ptinovacao.pt"
+			attributeFormDefault="qualified" elementFormDefault="qualified"
+			targetNamespace="http://ptinovacao.pt/madserv/ws/smsexpress/submissionmanager">
+			<xsd:import namespace="http://data.common.smsexpress.ws.madserv.ptinovacao.pt" />
+			<xsd:import namespace="http://data.submissionmanager.smsexpress.ws.madserv.ptinovacao.pt" />
+
+
+			<xsd:element name="cancelSubmission">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="0" name="authentication" nillable="true" type="ns1:AuthenticationInfo"/>
+                        <xsd:element minOccurs="0" name="submissionId" nillable="true" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="sendSmsSubmission">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="0" name="authentication" nillable="true" type="ns1:AuthenticationInfo"/>
+                        <xsd:element minOccurs="0" name="submission" nillable="true" type="ns2:SmsSubmission"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="sendSmsSubmissionResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="0" name="return" nillable="true" type="ns2:SubmissionStatus"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="sendMmsSubmission">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="0" name="authentication" nillable="true" type="ns1:AuthenticationInfo"/>
+                        <xsd:element minOccurs="0" name="submission" nillable="true" type="ns2:MmsSubmission"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="sendMmsSubmissionResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="0" name="return" nillable="true" type="ns2:SubmissionStatus"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="sendWapPushSubmission">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="0" name="authentication" nillable="true" type="ns1:AuthenticationInfo"/>
+                        <xsd:element minOccurs="0" name="submission" nillable="true" type="ns2:WapPushSubmission"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="sendWapPushSubmissionResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="0" name="return" nillable="true" type="ns2:SubmissionStatus"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="sendSmsPullSubmission">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="0" name="authentication" nillable="true" type="ns1:AuthenticationInfo"/>
+                        <xsd:element minOccurs="0" name="submission" nillable="true" type="ns2:SmsPullSubmission"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="sendSmsPullSubmissionResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="0" name="return" nillable="true" type="ns2:SubmissionStatus"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="getSmsPullSubmissionResponses">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="0" name="authentication" nillable="true" type="ns1:AuthenticationInfo"/>
+                        <xsd:element minOccurs="0" name="submissionId" nillable="true" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="getSmsPullSubmissionResponsesResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="0" name="return" nillable="true" type="ns2:ArrayOfSmsPullSubmissionResponse"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="getSubmissionStatus">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="0" name="authentication" nillable="true" type="ns1:AuthenticationInfo"/>
+                        <xsd:element minOccurs="0" name="submissionId" nillable="true" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="getSubmissionStatusResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="0" name="return" nillable="true" type="ns2:SubmissionStatus2"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="getSubmissionDetails">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="0" name="authentication" nillable="true" type="ns1:AuthenticationInfo"/>
+                        <xsd:element minOccurs="0" name="submissionId" nillable="true" type="xsd:string"/>
+                        <xsd:element minOccurs="0" name="getRecipientsStatus" type="xsd:boolean"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="getSubmissionDetailsResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="0" name="return" nillable="true" type="ns2:SubmissionDetails"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+		</xsd:schema>
+		
+	</wsdl2:types>
+
+	<wsdl2:interface name="ServiceInterface">
+		<wsdl2:operation name="getSubmissionDetails" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="authentication #in submissionId #in getRecipientsStatus #in return #return " pattern="http://www.w3.org/ns/wsdl/in-out">
+            <wsdl2:input element="tns:getSubmissionDetails" wsaw:Action="urn:getSubmissionDetails"/>
+            <wsdl2:output element="tns:getSubmissionDetailsResponse" wsaw:Action="urn:getSubmissionDetailsResponse"/>
+        </wsdl2:operation>
+        <wsdl2:operation name="cancelSubmission" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="authentication #in submissionId #in " pattern="http://www.w3.org/ns/wsdl/in-only">
+            <wsdl2:input element="tns:cancelSubmission" wsaw:Action="urn:cancelSubmission"/>
+        </wsdl2:operation>
+        <wsdl2:operation name="sendWapPushSubmission" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="authentication #in submission #in return #return " pattern="http://www.w3.org/ns/wsdl/in-out">
+            <wsdl2:input element="tns:sendWapPushSubmission" wsaw:Action="urn:sendWapPushSubmission"/>
+            <wsdl2:output element="tns:sendWapPushSubmissionResponse" wsaw:Action="urn:sendWapPushSubmissionResponse"/>
+        </wsdl2:operation>
+        <wsdl2:operation name="sendSmsPullSubmission" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="authentication #in submission #in return #return " pattern="http://www.w3.org/ns/wsdl/in-out">
+            <wsdl2:input element="tns:sendSmsPullSubmission" wsaw:Action="urn:sendSmsPullSubmission"/>
+            <wsdl2:output element="tns:sendSmsPullSubmissionResponse" wsaw:Action="urn:sendSmsPullSubmissionResponse"/>
+        </wsdl2:operation>
+        <wsdl2:operation name="getSmsPullSubmissionResponses" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="authentication #in submissionId #in return #return " pattern="http://www.w3.org/ns/wsdl/in-out">
+            <wsdl2:input element="tns:getSmsPullSubmissionResponses" wsaw:Action="urn:getSmsPullSubmissionResponses"/>
+            <wsdl2:output element="tns:getSmsPullSubmissionResponsesResponse" wsaw:Action="urn:getSmsPullSubmissionResponsesResponse"/>
+        </wsdl2:operation>
+        <wsdl2:operation name="getSubmissionStatus" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="authentication #in submissionId #in return #return " pattern="http://www.w3.org/ns/wsdl/in-out">
+            <wsdl2:input element="tns:getSubmissionStatus" wsaw:Action="urn:getSubmissionStatus"/>
+            <wsdl2:output element="tns:getSubmissionStatusResponse" wsaw:Action="urn:getSubmissionStatusResponse"/>
+        </wsdl2:operation>
+        <wsdl2:operation name="sendMmsSubmission" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="authentication #in submission #in return #return " pattern="http://www.w3.org/ns/wsdl/in-out">
+            <wsdl2:input element="tns:sendMmsSubmission" wsaw:Action="urn:sendMmsSubmission"/>
+            <wsdl2:output element="tns:sendMmsSubmissionResponse" wsaw:Action="urn:sendMmsSubmissionResponse"/>
+        </wsdl2:operation>
+        <wsdl2:operation name="sendSmsSubmission" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="authentication #in submission #in return #return " pattern="http://www.w3.org/ns/wsdl/in-out">
+            <wsdl2:input element="tns:sendSmsSubmission" wsaw:Action="urn:sendSmsSubmission"/>
+            <wsdl2:output element="tns:sendSmsSubmissionResponse" wsaw:Action="urn:sendSmsSubmissionResponse"/>
+        </wsdl2:operation>
+	</wsdl2:interface>
+
+	<wsdl2:binding name="SubmissionManagerServiceSoap12Binding"
+		interface="tns:ServiceInterface" type="http://www.w3.org/ns/wsdl/soap"
+		wsoap:version="1.2">
+		<wsdl2:operation ref="tns:getSubmissionDetails" wsoap:action="urn:getSubmissionDetails">
+            <wsdl2:input/>
+            <wsdl2:output/>
+        </wsdl2:operation>
+        <wsdl2:operation ref="tns:cancelSubmission" wsoap:action="urn:cancelSubmission">
+            <wsdl2:input/>
+        </wsdl2:operation>
+        <wsdl2:operation ref="tns:sendWapPushSubmission" wsoap:action="urn:sendWapPushSubmission">
+            <wsdl2:input/>
+            <wsdl2:output/>
+        </wsdl2:operation>
+        <wsdl2:operation ref="tns:sendSmsPullSubmission" wsoap:action="urn:sendSmsPullSubmission">
+            <wsdl2:input/>
+            <wsdl2:output/>
+        </wsdl2:operation>
+        <wsdl2:operation ref="tns:getSmsPullSubmissionResponses" wsoap:action="urn:getSmsPullSubmissionResponses">
+            <wsdl2:input/>
+            <wsdl2:output/>
+        </wsdl2:operation>
+        <wsdl2:operation ref="tns:getSubmissionStatus" wsoap:action="urn:getSubmissionStatus">
+            <wsdl2:input/>
+            <wsdl2:output/>
+        </wsdl2:operation>
+        <wsdl2:operation ref="tns:sendMmsSubmission" wsoap:action="urn:sendMmsSubmission">
+            <wsdl2:input/>
+            <wsdl2:output/>
+        </wsdl2:operation>
+        <wsdl2:operation ref="tns:sendSmsSubmission" wsoap:action="urn:sendSmsSubmission">
+            <wsdl2:input/>
+            <wsdl2:output/>
+        </wsdl2:operation>
+	</wsdl2:binding>
+
+	 <wsdl2:service name="SubmissionManager2" interface="tns:ServiceInterface">
+        <wsdl2:endpoint name="SubmissionManagerServiceHttpSoap12Endpoint" binding="tns:SubmissionManagerServiceSoap12Binding" address="http://smsexpress.cloud.altice-empresas.pt/ws-smsexpress-wsdl2/services/SubmissionManager2"/>
+    </wsdl2:service>
+</wsdl2:description>

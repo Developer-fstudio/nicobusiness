@@ -11,12 +11,16 @@
    @csrf
    @method('PUT')
   <div class="mb-4">
-    <label for="" class="form-label">Nome</label>
-    <input id="name" name="name" type="text" class="form-control" value="{{$client->name}}">
+    <label for="name" class="form-label">Nome</label>
+    <input id="name" name="name" type="text" class="form-control" value="{{$client->name}}" required>
   </div>
   <div class="mb-4">
-    <label for="" class="form-label">Telefone</label>
-    <input id="phone" name="phone" type="text" class="form-control" value="{{$client->phone}}">
+    <label for="phone" class="form-label">Telefone</label>
+    <input id="phone" name="phone" type="text" class="form-control" value="{{$client->phone}}" required>
+  </div>  
+  <div class="mb-4">
+    <label for="dataNascimento" class="form-label">Data de Nascimento</label>
+    <input type='date' name="dataNascimento" class="form-control" id='dataNascimento' value="{{$client->dataNascimento}}" required>
   </div>
   <div class="mb-4">
     <label for="gernder">Example select</label>

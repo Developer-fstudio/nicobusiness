@@ -11,15 +11,15 @@
 <form action="/clients" method="POST">
   @csrf
   <div class="mb-3">
-    <label for="" class="form-label">Nome</label>
+    <label for="name" class="form-label">Nome</label>
     <input id="name" name="name" type="text" class="form-control" tabindex="1" required>
   </div>
   <div class="mb-3">
-    <label for="" class="form-label">Telemovel</label>
+    <label for="phone" class="form-label">Telemovel</label>
     <input id="phone" name="phone" type="text" class="form-control" tabindex="2" required>
   </div>
   <div class="mb-3">
-    <label for="" class="form-label">Data de Nascimento</label>
+    <label for="dataNascimento" class="form-label">Data de Nascimento</label>
     <input type='date' name="dataNascimento" class="form-control" id='dataNascimento' required>
   </div>
   <div class="mb-3">

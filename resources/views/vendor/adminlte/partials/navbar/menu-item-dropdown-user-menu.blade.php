@@ -70,9 +70,14 @@
             @endif
             <a class="btn btn-default btn-flat float-right @if(!$profile_url) btn-block @endif"
                href="/user/profile">
-                <i class="fa fa-fw fa-power-on"></i>
+                <i class="fa fa-fw fa-user"></i>
                 {{ __('adminlte::adminlte.userSettings') }}
             </a>
+            <a class="btn btn-default btn-flat float-right @if(!$profile_url) btn-block @endif"
+            href="/empresa">
+             <i class="fa fa-fw fa-building"></i>
+             {{ __('adminlte::adminlte.EmpresaSettings') }}
+         </a>
             <a class="btn btn-default btn-flat float-right @if(!$profile_url) btn-block @endif"
                href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class="fa fa-fw fa-power-off"></i>

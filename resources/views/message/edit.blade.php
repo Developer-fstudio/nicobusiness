@@ -11,12 +11,12 @@
    @csrf
    @method('PUT')
   <div class="mb-6">
-    <label for="" class="form-label">Assunto</label>
-    <input id="subject" name="subject" type="text" class="form-control" value="{{$message->subject}}">
+    <label for="subject" class="form-label">Assunto</label>
+    <input id="subject" name="subject" type="text" class="form-control" value="{{$message->subject}}" required>
   </div>
   <div class="mb-6" style="margin-bottom: 50px">
-    <label for="" class="form-label">Mensagem</label>
-    <input id="message" name="message" type="text" class="form-control" value="{{$message->message}}">
+    <label for="message" class="form-label">Mensagem</label>
+    <input id="message" name="message" type="text" class="form-control" value="{{$message->message}}" required>
   </div>
   <a href="/messages" class="btn btn-secondary">Cancelar</a>
   <button type="submit" class="btn btn-primary">Guardar</button>
